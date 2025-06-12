@@ -6,6 +6,10 @@ const doctorSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    appointment:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Appointment",
+    },
     specialization: {
         type: String,
         required: true,

@@ -30,6 +30,7 @@ export  const ProtectedAuth=async(req,res,next)=>{
 
 export const authorizeRoles=(...roles)=>{
     return (req,res,next)=>{
+        console.log(req.user);
         if(!roles.includes(req.user.role))
         {
             return res.status(403).json({message:"Access Denied "});
@@ -39,4 +40,10 @@ export const authorizeRoles=(...roles)=>{
 }
 
 
-// export default ProtectedAuth;
+export const isAdmin=(req,res,next)=>{
+    if(req.user?.role!=='admin')
+    {
+        return res.status(403).json({message:"Access denied : Admin Only."})
+    }
+    next();
+}
