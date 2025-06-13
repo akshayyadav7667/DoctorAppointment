@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import User from "../models/User.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import Appointment from '../models/Appointment.js'
+
 
 
 
@@ -140,3 +142,54 @@ export const userProfile= async(req,res)=>{
 }
 
 
+
+// get the appointment status
+
+export const getUserAppointments= async(req,res)=>{
+    const userId= req.user?.id
+
+    try {
+        const appointment = await Appointment.find({user_Id: userId}).populate("user_Id","name phone").populate("doctor_Id","specialization experience").sort({createdAt:-1});
+        // console.log(appointment)
+        // console.log(userId);
+        res.status(200).json({message:"User details",appointment});
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message:error.message});
+    }
+}
+
+
+//  cancel the appointment 
+export const CancelAppointment=async(req,res)=>{
+    const userId= req.user?.id;
+
+    const {appointmentId, status}= req.body;
+
+
+    try {
+        const appointment = await Appointment.findOne({_id: appointmentId, user_Id:userId})
+
+        // console.log(appointment);
+
+        if(!appointment)
+        {
+            return res.status(404).json({message:"Appointment not found "});
+        }
+
+        // console.log(appointmentId, status);
+        appointment.status=status
+
+
+        await appointment.save();
+
+
+        // console.log(appointment)
+
+        res.status(200).json({message:"Cancel the appointment",appointment});
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message:error.message})
+    }
+}

@@ -102,3 +102,29 @@ export const changeAppointmentStatus = async (req, res) => {
 
 }
 
+
+
+// Doctor and see the requested appointment and confirmed appointment 
+
+export const seeAppointmentDetails=async(req,res)=>{
+
+    const doctoruserId= req.user?.id;
+    
+    try {
+        const doctor = await Doctor.findOne({user_Id: doctoruserId});
+
+        // console.log(doctor);
+
+        const appointment= await Appointment.find({doctor_Id: doctor._id}).populate("user_Id","name, phone").sort({createdAt:-1});
+
+        // console.log(appointment)
+
+
+        res.status(200).json({message:"Doctor see all Appointment ",appointment});
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message:error.message})
+    }
+}
+
+
