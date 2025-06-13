@@ -85,6 +85,7 @@ export const changeAppointmentStatus = async (req, res) => {
         })
 
         // console.log(appointment);
+        
         if (!appointment) {
             return res.status(404).json({ message: "Appointment not found !" });
         }
@@ -128,3 +129,20 @@ export const seeAppointmentDetails=async(req,res)=>{
 }
 
 
+
+// update doctor profile
+
+export const updateDoctorProfile=async(req,res)=>{
+    const doctorUserId= req.user?.id;
+    try {
+
+        console.log(doctorUserId);
+        const doctor= await Doctor.findOne({user_Id:doctorUserId});
+        console.log(doctor);
+
+        res.status(200).json({message:"update the profile "})
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error:error.message})
+    }
+}
