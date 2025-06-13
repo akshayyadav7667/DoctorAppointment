@@ -85,7 +85,7 @@ export const changeAppointmentStatus = async (req, res) => {
         })
 
         // console.log(appointment);
-        
+
         if (!appointment) {
             return res.status(404).json({ message: "Appointment not found !" });
         }
@@ -107,24 +107,24 @@ export const changeAppointmentStatus = async (req, res) => {
 
 // Doctor and see the requested appointment and confirmed appointment 
 
-export const seeAppointmentDetails=async(req,res)=>{
+export const seeAppointmentDetails = async (req, res) => {
 
-    const doctoruserId= req.user?.id;
-    
+    const doctoruserId = req.user?.id;
+
     try {
-        const doctor = await Doctor.findOne({user_Id: doctoruserId});
+        const doctor = await Doctor.findOne({ user_Id: doctoruserId });
 
         // console.log(doctor);
 
-        const appointment= await Appointment.find({doctor_Id: doctor._id}).populate("user_Id","name, phone").sort({createdAt:-1});
+        const appointment = await Appointment.find({ doctor_Id: doctor._id }).populate("user_Id", "name, phone").sort({ createdAt: -1 });
 
         // console.log(appointment)
 
 
-        res.status(200).json({message:"Doctor see all Appointment ",appointment});
+        res.status(200).json({ message: "Doctor see all Appointment ", appointment });
     } catch (error) {
         console.log(error);
-        res.status(400).json({message:error.message})
+        res.status(400).json({ message: error.message })
     }
 }
 
@@ -132,17 +132,74 @@ export const seeAppointmentDetails=async(req,res)=>{
 
 // update doctor profile
 
-export const updateDoctorProfile=async(req,res)=>{
-    const doctorUserId= req.user?.id;
+export const updateDoctorProfile = async (req, res) => {
+    const doctorUserId = req.user?.id;
+    try {
+
+        const { specialization, experience, fees, timings, location } = req.body;
+        // console.log(doctorUserId);
+        if (!fees || fees < 0) {
+            return res.status(400).json({ message: "Invalid consultation fee" });
+        }
+
+
+        const doctor = await Doctor.findOneAndUpdate(
+            { user_Id: doctorUserId },
+            {
+                specialization, experience, fees, timings, location
+            },
+            { new: true }
+
+        )
+        // const doctor = await Doctor.findOne({ user_Id: doctorUserId });
+        // console.log(doctor);
+
+        res.status(200).json({ message: "update the profile ", doctor })
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ error: error.message })
+    }
+}
+
+
+
+// dashboard of the doctor 
+
+export const doctorDashboard = async (req, res) => {
+    const doctorUserId = req.user?.id;
     try {
 
         console.log(doctorUserId);
-        const doctor= await Doctor.findOne({user_Id:doctorUserId});
-        console.log(doctor);
+        const doctor = await Doctor.findOne({ user_Id: doctorUserId });
 
-        res.status(200).json({message:"update the profile "})
+        if (!doctor) {
+            return res.status(404).json({ message: "Doctor not found" });
+        }
+
+
+        const appointment = await Appointment.find({ doctor_Id: doctor._id }).populate("user_Id", "name email phone").sort({ createdAt: -1 });
+        // console.log(appointment);
+        const appovedAppointment = appointment.filter((app) => app.status === 'confirmed').length;
+        const pendingAppointment = appointment.filter((app) => app.status === 'pending').length;
+        const rejectAppointment = appointment.filter((app) => app.status === 'rejected').length;
+
+
+        // console.log(appovedAppointment);
+        // console.log(pendingAppointment);
+        // console.log(rejectAppointment);
+
+
+
+        res.status(200).json({
+            message: "Dashboard of the doctor",
+            totalAppointment: appointment.length,
+            appovedAppointment,
+            pendingAppointment,
+            rejectAppointment
+        })
+
     } catch (error) {
         console.log(error);
-        res.status(400).json({error:error.message})
+        res.status(400).json({ message: error.message })
     }
 }
