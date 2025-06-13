@@ -1,5 +1,6 @@
 import Doctor from "../models/Doctor.js"
 import User from '../models/User.js'
+import Appointment from '../models/Appointment.js'
 
 export const applyDoctor = async (req, res) => {
     try {
@@ -43,13 +44,12 @@ export const getDoctorProfile = async (req, res) => {
     try {
         const doctorId = req.user?.id;
 
-        const doctor= await Doctor.findOne({user_Id: req.user?.id}).populate("user_Id","-password");
+        const doctor = await Doctor.findOne({ user_Id: req.user?.id }).populate("user_Id", "-password");
 
 
         // console.log(doctor);
-        if(doctor.status!=='approved')
-        {
-            return res.status(403).json({message:"Doctor not apporved yet"});
+        if (doctor.status !== 'approved') {
+            return res.status(403).json({ message: "Doctor not apporved yet" });
         }
 
         res.status(200).json({ doctor: "Doctor Profile ", doctor });
@@ -64,13 +64,40 @@ export const getDoctorProfile = async (req, res) => {
 
 
 // Approve or reject the appointment
-export const changeAppointmentStatus= async (req,res)=>{
+export const changeAppointmentStatus = async (req, res) => {
+    const doctorUserId = req.user?.id;
+    const { appointmentId, status } = req.body;
+    // console.log()
 
     try {
-        
+
+        // console.log(doctorUserId)
+        const doctor = await Doctor.findOne({ user_Id: doctorUserId })
+        // console.log(doctor);
+
+        if (!doctor) {
+            return res.status(404).json({ message: "Doctor not found " });
+        }
+
+        const appointment = await Appointment.findOne({
+            _id: appointmentId,
+            doctor_Id: doctor._id,
+        })
+
+        // console.log(appointment);
+        if (!appointment) {
+            return res.status(404).json({ message: "Appointment not found !" });
+        }
+
+        appointment.status = status;
+        await appointment.save();
+        // console.log(appointment);
+
+
+        res.status(200).json({ message: "Appointment status changed" })
     } catch (error) {
         console.log(error);
-        res.status(400).json({message:error.message});
+        res.status(400).json({ message: error.message });
     }
 
 }
