@@ -3,6 +3,8 @@ import User from "../models/User.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import Appointment from '../models/Appointment.js'
+import Doctor from "../models/Doctor.js";
+import Comment from '../models/comments.js'
 
 
 
@@ -193,3 +195,58 @@ export const CancelAppointment=async(req,res)=>{
         res.status(400).json({message:error.message})
     }
 }
+
+
+
+// add comments to the doctor
+
+export const  addComments= async(req,res)=>{
+    const userId= req.user?.id;
+    const {doctorId}=req.params;
+
+    const {commentText}= req.body;
+
+
+    try {
+        const doctor = await Doctor.findById({_id: doctorId})
+        if(!doctor)
+        {
+            return res.status(404).json({message:"Doctor not found !"});
+        }
+
+        // console.log(userId)
+        const comment = new Comment({
+            user_Id: userId,
+            doctor_Id: doctor._id,
+            commentText:commentText
+
+        })
+
+        await comment.save();
+
+        // console.log(comment)
+
+
+        res.status(200).json({message:"Comments added ",comment});
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message:error.message});   
+    }
+} 
+
+
+
+// show all doctors
+
+export const showAllDoctors=async(req,res)=>{
+    try {
+        const doctors= await Doctor.find({status:"approved"});
+        // console.log(doctors);
+
+        res.status(200).json({message:"Fetched all doctors", doctors});
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message:error.message})
+    }
+}
+

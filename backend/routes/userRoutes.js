@@ -1,6 +1,6 @@
 
 import express from 'express'
-import { CancelAppointment, getUserAppointments, loginUser, registerUser, userProfile } from '../controllers/UserController.js';
+import { CancelAppointment, getUserAppointments, loginUser, registerUser, addComments, userProfile, showAllDoctors } from '../controllers/UserController.js';
 import { authorizeRoles, ProtectedAuth } from '../middleware/Auth.js';
 import { applyDoctor } from '../controllers/DoctorController.js';
 
@@ -13,6 +13,10 @@ userRouter.post('/applyDoctor', ProtectedAuth, authorizeRoles('user'), applyDoct
 
 userRouter.get('/get-appointment', ProtectedAuth, authorizeRoles('user'), getUserAppointments)
 userRouter.post('/cancel-appointment', ProtectedAuth, authorizeRoles('user'), CancelAppointment)
+
+userRouter.post('/add-comments/:doctorId', ProtectedAuth, authorizeRoles('user'),addComments)
+
+userRouter.get('/alldoctors',showAllDoctors)
 export default userRouter;
 
 
