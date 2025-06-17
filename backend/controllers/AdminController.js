@@ -3,6 +3,9 @@ import Appointment from '../models/Appointment.js'
 import User from '../models/User.js'
 // import Appointment from '../models/Appointment.js'
 
+
+
+
 // get all doctors
 export const getAllDoctors = async (req, res) => {
     try {
@@ -14,6 +17,10 @@ export const getAllDoctors = async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 }
+
+
+
+
 
 
 

@@ -138,6 +138,7 @@ export const updateDoctorProfile = async (req, res) => {
 
         const { specialization, experience, fees, timings, location } = req.body;
         // console.log(doctorUserId);
+        
         if (!fees || fees < 0) {
             return res.status(400).json({ message: "Invalid consultation fee" });
         }

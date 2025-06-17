@@ -109,37 +109,35 @@ export const loginUser = async (req, res) => {
 
 // get the profile
 
-export const userProfile= async(req,res)=>{
+export const userProfile = async (req, res) => {
     try {
-        
-        const id= req.user?.id;
+
+        const id = req.user?.id;
 
         // console.log(req.user)
 
-        if(!id)
-        {
+        if (!id) {
             return res.status(404).json("Page is not found !");
         }
 
         const userProfile = await User.findById(id);
         // console.log(userProfile)
 
-        if(!userProfile)
-        {
+        if (!userProfile) {
             return res.status(404).json("User profile not found !");
         }
 
-        const {password,...others}= userProfile.toObject();
+        const { password, ...others } = userProfile.toObject();
 
 
 
-        res.status(200).json({message:"user profile", others});
+        res.status(200).json({ message: "user profile", others });
 
 
     } catch (error) {
         console.log(error);
         res.status(400).json({ errror: error.message });
-        
+
     }
 }
 
@@ -147,40 +145,39 @@ export const userProfile= async(req,res)=>{
 
 // get the appointment status
 
-export const getUserAppointments= async(req,res)=>{
-    const userId= req.user?.id
+export const getUserAppointments = async (req, res) => {
+    const userId = req.user?.id
 
     try {
-        const appointment = await Appointment.find({user_Id: userId}).populate("user_Id","name phone").populate("doctor_Id","specialization experience").sort({createdAt:-1});
+        const appointment = await Appointment.find({ user_Id: userId }).populate("user_Id", "name phone").populate("doctor_Id", "specialization experience").sort({ createdAt: -1 });
         // console.log(appointment)
         // console.log(userId);
-        res.status(200).json({message:"User details",appointment});
+        res.status(200).json({ message: "User details", appointment });
     } catch (error) {
         console.log(error);
-        res.status(400).json({message:error.message});
+        res.status(400).json({ message: error.message });
     }
 }
 
 
 //  cancel the appointment 
-export const CancelAppointment=async(req,res)=>{
-    const userId= req.user?.id;
+export const CancelAppointment = async (req, res) => {
+    const userId = req.user?.id;
 
-    const {appointmentId, status}= req.body;
+    const { appointmentId, status } = req.body;
 
 
     try {
-        const appointment = await Appointment.findOne({_id: appointmentId, user_Id:userId})
+        const appointment = await Appointment.findOne({ _id: appointmentId, user_Id: userId })
 
         // console.log(appointment);
 
-        if(!appointment)
-        {
-            return res.status(404).json({message:"Appointment not found "});
+        if (!appointment) {
+            return res.status(404).json({ message: "Appointment not found " });
         }
 
         // console.log(appointmentId, status);
-        appointment.status=status
+        appointment.status = status
 
 
         await appointment.save();
@@ -188,11 +185,11 @@ export const CancelAppointment=async(req,res)=>{
 
         // console.log(appointment)
 
-        res.status(200).json({message:"Cancel the appointment",appointment});
+        res.status(200).json({ message: "Cancel the appointment", appointment });
 
     } catch (error) {
         console.log(error);
-        res.status(400).json({message:error.message})
+        res.status(400).json({ message: error.message })
     }
 }
 
@@ -200,25 +197,24 @@ export const CancelAppointment=async(req,res)=>{
 
 // add comments to the doctor
 
-export const  addComments= async(req,res)=>{
-    const userId= req.user?.id;
-    const {doctorId}=req.params;
+export const addComments = async (req, res) => {
+    const userId = req.user?.id;
+    const { doctorId } = req.params;
 
-    const {commentText}= req.body;
+    const { commentText } = req.body;
 
 
     try {
-        const doctor = await Doctor.findById({_id: doctorId})
-        if(!doctor)
-        {
-            return res.status(404).json({message:"Doctor not found !"});
+        const doctor = await Doctor.findById({ _id: doctorId })
+        if (!doctor) {
+            return res.status(404).json({ message: "Doctor not found !" });
         }
 
         // console.log(userId)
         const comment = new Comment({
             user_Id: userId,
             doctor_Id: doctor._id,
-            commentText:commentText
+            commentText: commentText
 
         })
 
@@ -227,26 +223,48 @@ export const  addComments= async(req,res)=>{
         // console.log(comment)
 
 
-        res.status(200).json({message:"Comments added ",comment});
+        res.status(200).json({ message: "Comments added ", comment });
     } catch (error) {
         console.log(error);
-        res.status(400).json({message:error.message});   
+        res.status(400).json({ message: error.message });
     }
-} 
+}
 
 
 
 // show all doctors
 
-export const showAllDoctors=async(req,res)=>{
+export const showAllDoctors = async (req, res) => {
     try {
-        const doctors= await Doctor.find({status:"approved"});
+        const { specialization, gender, experience, fees } = req.query;
+
+        const filter = { status: "approved" };
+
+        if (specialization) {
+            filter.specialization = { $regex: specialization, $options: "i" }
+        }
+
+        if (gender) {
+            filter.gender = gender;
+        }
+
+        if (experience) {
+            filter.experience = { $gte: Number(experience) };
+        }
+
+        if (fees) {
+            filter.fees = { $lte: Number(fees) };
+
+        }
+        const doctors = await Doctor.find(filter);
         // console.log(doctors);
 
-        res.status(200).json({message:"Fetched all doctors", doctors});
+
+
+        res.status(200).json({ message: "Fetched all doctors", doctors });
     } catch (error) {
         console.log(error);
-        res.status(400).json({message:error.message})
+        res.status(400).json({ message: error.message })
     }
 }
 
