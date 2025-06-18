@@ -1,35 +1,72 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import UserDashboard from "./pages/user/UserDashboard";
+import DoctorDashboard from "./pages/doctor/DoctorDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import PublicLayout from "./layout/PublicLayout";
+import About from "./pages/About";
+import Features from "./pages/Features";
+import Contact from "./pages/Contact";
+import Faq from "./pages/Faq";
+import Blog from "./pages/Blog";
+import HomePage from "./pages/HomePage";
+import Doctors from "./pages/Doctors";
 function App() {
-  const [count, setCount] = useState(0)
+  const { user } = useContext(AuthContext);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      {/* public Routes */}
+
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/about" element={<About />} />
+        <Route path="/doctors" element={<Doctors/>}/>
+        <Route path="/features" element={<Features />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/blogs" element={<Blog />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
+
+      {/* User Routes */}
+      <Route
+        path="/user/*"
+        element={
+          <ProtectedRoute role="user">
+            {" "}
+            <UserDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Doctor Routes */}
+      <Route
+        path="/doctor/*"
+        element={
+          <ProtectedRoute role="doctor">
+            <DoctorDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute role="admin">
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
