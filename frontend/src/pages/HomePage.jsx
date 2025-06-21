@@ -5,6 +5,7 @@ import Banner from '../components/Banner'
 import WhyHostpital from '../components/WhyHostpital'
 import Benefits from '../components/Benefits'
 import Faq from './Faq'
+import Features from './Features'
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <Banner/>
       <Benefits/>
       <WhyHostpital/>
+      <Features/>
       <Faq/>
       
     </div>

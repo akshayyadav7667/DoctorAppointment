@@ -8,7 +8,7 @@ export default function WhyHostpital() {
   return (
     <div className="py-10">
       <h2 className="text-2xl md:text-4xl font-semibold text-gray-700 mb-14 ml-4">Why MedConnect</h2>
-      <div className="flex  flex-col md:flex-row  space-y-10 p-2">
+      <div className="grid grid-cols-2  md:grid-cols-4  space-y-1 md:space-y-10 p-2">
         <div className="flex relative flex-col p-8 bg-blue-500 text-white">
           <span className="absolute top-0  -translate-y-1/2">
             <img
