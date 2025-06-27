@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import Appointment from '../models/Appointment.js'
 import Doctor from "../models/Doctor.js";
 import Comment from '../models/comments.js'
+import { cloudinary } from '../config/cloudinary.js'
 
 
 
@@ -14,6 +15,7 @@ export const registerUser = async (req, res) => {
 
     const { name, email, password, phone, dob, gender, address, role } = req.body;
     // console.log(req.body)
+    // console.log(req.file)
 
     try {
 
@@ -25,6 +27,7 @@ export const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // console.log(hashedPassword);
+        // const image = req.file;
 
         const newUser = new User({
             name,
@@ -140,6 +143,80 @@ export const userProfile = async (req, res) => {
 
     }
 }
+
+
+
+//Update the user profile
+
+export const updateUserProfile = async (req, res) => {
+
+    const userId = req.user?.id;
+    const { name, phone, dob, gender, address ,email} = req.body;
+    try {
+        const user = await User.findById(userId);
+        // console.log(req.file);
+
+        if (!user) return res.status(404).json({ message: "User not found!" });
+
+        if (req.file?.path) {
+            if (user.imageId) {
+                await cloudinary.uploader.destroy(user.imageId)
+            }
+
+            
+            user.image = req.file.path;        // Cloudinary URL
+            user.imageId = req.file.filename;  // Cloudinary public_id
+        }
+
+
+        //  Update other fields if sent
+        if (name) user.name = name;
+        if (phone) user.phone = phone;
+        if (dob) user.dob = dob;
+        
+        if (gender) user.gender = gender;
+        if (address) user.address = address;
+
+        if(email && email!==user.email)
+        {
+            const emailExist= await User.findOne({email});
+
+            if(emailExist)
+            {
+                return res.status(400).json({message:"Email is already in use"});
+            }
+            user.email=email;
+        }
+
+
+        await user.save();
+
+        // console.log(user);
+
+
+        const { password, ...userData } = user.toObject();
+        res.status(200).json({ message: "Profile updated successfully", user: userData });
+
+
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

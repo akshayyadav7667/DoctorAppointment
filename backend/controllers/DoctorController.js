@@ -3,6 +3,9 @@ import User from '../models/User.js'
 import Appointment from '../models/Appointment.js'
 
 export const applyDoctor = async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.file);
+
     try {
 
         const existingDoctor = await Doctor.findOne({ user_Id: req.user.id });
@@ -13,8 +16,11 @@ export const applyDoctor = async (req, res) => {
 
         const doctor = new Doctor({
             user_Id: req.user.id,
+            // doctor_image: req.file?.path || "", 
             specialization: req.body.specialization,
-            experience: req.body.experience,
+            about:req.body.about,
+            experience:req.body.experience,
+            gender:req.body.gender,
             fees: req.body.fees,
             timings: req.body.timings,
             location: req.body.location,
@@ -25,9 +31,7 @@ export const applyDoctor = async (req, res) => {
 
         await doctor.save();
 
-        await User.findByIdAndUpdate(req.user.id, { role: "doctor" });
 
-        // console.log("hello")
 
         res.status(200).json({ message: "Applied for the doctor", doctor });
 
@@ -42,7 +46,7 @@ export const applyDoctor = async (req, res) => {
 
 export const getDoctorProfile = async (req, res) => {
     try {
-        const doctorId = req.user?.id;
+        // const doctorId = req.user?.id;
 
         const doctor = await Doctor.findOne({ user_Id: req.user?.id }).populate("user_Id", "-password");
 
@@ -52,7 +56,7 @@ export const getDoctorProfile = async (req, res) => {
             return res.status(403).json({ message: "Doctor not apporved yet" });
         }
 
-        res.status(200).json({ doctor: "Doctor Profile ", doctor });
+        res.status(200).json({ message: "Doctor Profile ", doctor });
 
 
     } catch (error) {
@@ -105,7 +109,7 @@ export const changeAppointmentStatus = async (req, res) => {
 
 
 
-// Doctor and see the requested appointment and confirmed appointment 
+// Doctor can see the requested appointment and confirmed appointment 
 
 export const seeAppointmentDetails = async (req, res) => {
 
@@ -204,3 +208,7 @@ export const doctorDashboard = async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 }
+
+
+
+

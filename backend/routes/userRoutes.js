@@ -1,14 +1,17 @@
 
 import express from 'express'
-import { CancelAppointment, getUserAppointments, loginUser, registerUser, addComments, userProfile, showAllDoctors } from '../controllers/UserController.js';
+import { CancelAppointment, getUserAppointments, loginUser, registerUser, addComments, userProfile, showAllDoctors, updateUserProfile } from '../controllers/UserController.js';
 import { authorizeRoles, ProtectedAuth } from '../middleware/Auth.js';
 import { applyDoctor } from '../controllers/DoctorController.js';
+import uploadUser from '../middleware/multerUser.js';
 
 const userRouter = express.Router();
 
 userRouter.post('/register', registerUser);
 userRouter.post('/login', loginUser);
 userRouter.get('/profile', ProtectedAuth, authorizeRoles("user", "doctor", "admin"), userProfile)
+
+userRouter.put('/update-profile', ProtectedAuth, authorizeRoles("user"), uploadUser.single('image'), updateUserProfile )
 userRouter.post('/applyDoctor', ProtectedAuth, authorizeRoles('user'), applyDoctor)
 
 userRouter.get('/get-appointment', ProtectedAuth, authorizeRoles('user'), getUserAppointments)

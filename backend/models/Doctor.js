@@ -4,7 +4,21 @@ const doctorSchema = new mongoose.Schema({
     user_Id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,
+        required: true
+    },
+    doctor_image:{
+        type:String
+    },
+    doctor_image_id:{
+        type:String,
+    },
+    about:{
+        type:Object,
+        required:true
+    },
+    available:{
+        type:Boolean,
+        default: true,
     },
     appointment:{
         type: mongoose.Schema.Types.ObjectId,

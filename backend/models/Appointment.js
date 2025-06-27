@@ -16,6 +16,10 @@ const appointmentSchema = new mongoose.Schema({
     },
     data: String,
     time: String,
+    payment:{
+        type:Boolean,
+        default:false
+    }
 }, { timeseries: true });
 
 
