@@ -1,6 +1,13 @@
 import Doctor from "../models/Doctor.js"
 import User from '../models/User.js'
 import Appointment from '../models/Appointment.js'
+import { sendEmail } from "../utils/sendEmail.js";
+
+
+
+
+
+
 
 export const applyDoctor = async (req, res) => {
     // console.log(req.body);
@@ -18,9 +25,9 @@ export const applyDoctor = async (req, res) => {
             user_Id: req.user.id,
             // doctor_image: req.file?.path || "", 
             specialization: req.body.specialization,
-            about:req.body.about,
-            experience:req.body.experience,
-            gender:req.body.gender,
+            about: req.body.about,
+            experience: req.body.experience,
+            gender: req.body.gender,
             fees: req.body.fees,
             timings: req.body.timings,
             location: req.body.location,
@@ -40,6 +47,11 @@ export const applyDoctor = async (req, res) => {
         res.status(400).json({ error: error.message })
     }
 }
+
+
+
+
+
 
 
 // get profile Doctor
@@ -67,7 +79,17 @@ export const getDoctorProfile = async (req, res) => {
 
 
 
-// Approve or reject the appointment
+
+
+
+
+
+
+
+
+
+
+// Approve or reject the appointment 
 export const changeAppointmentStatus = async (req, res) => {
     const doctorUserId = req.user?.id;
     const { appointmentId, status } = req.body;
@@ -76,8 +98,8 @@ export const changeAppointmentStatus = async (req, res) => {
     try {
 
         // console.log(doctorUserId)
-        const doctor = await Doctor.findOne({ user_Id: doctorUserId })
-        // console.log(doctor);
+        const doctor = await Doctor.findOne({ user_Id: doctorUserId }).populate("user_Id", "name phone")
+        console.log("doctor", doctor);
 
         if (!doctor) {
             return res.status(404).json({ message: "Doctor not found " });
@@ -86,7 +108,7 @@ export const changeAppointmentStatus = async (req, res) => {
         const appointment = await Appointment.findOne({
             _id: appointmentId,
             doctor_Id: doctor._id,
-        })
+        }).populate("user_Id", "email name")
 
         // console.log(appointment);
 
@@ -96,9 +118,32 @@ export const changeAppointmentStatus = async (req, res) => {
 
         appointment.status = status;
         await appointment.save();
+
+        // console.log("appointment",appointment);
+
+
+        if (status === 'confirmed') {
+            const userEmail = appointment.user_Id.email;
+            const username = appointment.user_Id.name;
+
+            const subject = "Your Appointment is Confirmed";
+            const message = `Hello ${username},\n\nYour appointment with Dr. ${doctor.user_Id.name} has been confirmed.\n Phone number :- ${doctor.user_Id.phone} \nThank you!`
+
+            // console.log(userEmail);
+            // console.log(username);
+            // console.log(message);
+
+            await sendEmail(userEmail, subject, message);
+        }
+
+
+        if (status === 'rejected') {
+            const subject = "Your Appointment is Rejected";
+            const message = `Hello ${username},\n\nWe regret to inform you that your appointment with Dr. ${doctor.user_Id.name} has been rejected.\nYou may book a new appointment at your convenience.\n\nThank you for using our service.`;
+            await sendEmail(userEmail, subject, message);
+        }
+
         // console.log(appointment);
-
-
         res.status(200).json({ message: "Appointment status changed" })
     } catch (error) {
         console.log(error);
@@ -106,6 +151,11 @@ export const changeAppointmentStatus = async (req, res) => {
     }
 
 }
+
+
+
+
+
 
 
 
@@ -134,6 +184,14 @@ export const seeAppointmentDetails = async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
 // update doctor profile
 
 export const updateDoctorProfile = async (req, res) => {
@@ -142,7 +200,7 @@ export const updateDoctorProfile = async (req, res) => {
 
         const { specialization, experience, fees, timings, location } = req.body;
         // console.log(doctorUserId);
-        
+
         if (!fees || fees < 0) {
             return res.status(400).json({ message: "Invalid consultation fee" });
         }
@@ -165,6 +223,14 @@ export const updateDoctorProfile = async (req, res) => {
         res.status(400).json({ error: error.message })
     }
 }
+
+
+
+
+
+
+
+
 
 
 
