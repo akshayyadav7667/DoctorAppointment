@@ -45,18 +45,18 @@ export default function Faq() {
 
   return (
     <div className="flex flex-col items-center px-4">
-      <h2 className="text-3xl py-10 text-blue-600 font-semibold">
+      <h2 className="text-3xl py-10 text-orange-600 font-semibold">
         Frequently Asked Questions
       </h2>
 
       {Data.map((item) => (
         <div
           key={item.id}
-          className="w-full md:w-[65%] bg-blue-50 rounded-md mb-4 overflow-hidden transition-all duration-300 ease-in-out"
+          className="w-full md:w-[65%] bg-orange-50 rounded-md mb-4 overflow-hidden transition-all duration-300 ease-in-out"
         >
           {/* Header row */}
           <div
-            className="flex justify-between items-center px-4 py-4 cursor-pointer hover:bg-blue-400  transition-colors"
+            className="flex justify-between items-center px-4 py-4 cursor-pointer hover:bg-orange-300  transition-colors"
             onClick={() => toggleItem(item.id)}
           >
             <h3 className="text-gray-700 font-medium group-hover:text-white">
@@ -71,11 +71,11 @@ export default function Faq() {
 
           {/* Expandable content */}
           <div
-            className={`px-4 text-gray-600 bg-blue-100 transition-all duration-300 ease-in-out ${
+            className={`px-4 text-gray-600 bg-orange-100 transition-all duration-300 ease-in-out ${
               openItemId === item.id
                 ? "max-h-[500px] opacity-100 py-4"
                 : "max-h-0 opacity-0 py-0"
-            } overflow-hidden`}
+            } `}
           >
             {item.content}
           </div>

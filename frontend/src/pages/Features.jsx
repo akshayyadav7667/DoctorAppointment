@@ -16,6 +16,7 @@ import {
   Video,
   ScrollText,
 } from "lucide-react";
+import Benefits from "../components/Benefits";
 
 const steps = [
   { icon: SearchCheck, label: "Download mobile App" },
@@ -90,7 +91,19 @@ export default function Features() {
         </div>
       </div>
 
-      <div className="flex  px-8 ">
+
+
+
+      
+   
+
+
+
+
+
+
+
+      <div className="flex flex-col sm:flex-row  items-center gap-4 md:gap-8 m-2 ">
         <div className="w-1/3 bg-blue-50 flex justify-center items-center rounded-full ">
           <img src={freature1} alt="" className=" flex justify-center " />
         </div>
@@ -98,16 +111,20 @@ export default function Features() {
         <div className="w-2/3">
           <h2 className="text-center mt-8 mb-10 text-3xl md:text-4xl">Additional Offerings</h2>
 
-          <div className=" grid grid-cols-2  ">
+          <div className=" grid grid-cols-1 md:grid-cols-2 gap-4  ">
             {data.map((item) => (
-              <div className="p-6 bg-orange-50 m-6 w-[12rem] md:w-[22rem] shadow-lg ">
+              <div key={item.data} className="p-6 flex flex-wrap items-center  bg-orange-50  shadow-lg ">
                 <item.icons className="w-10 h-10 text-orange-500" />
-                <p className="mt-5 text-gray-600">{item.data}</p>
+                <p className="mt-5 ml-4 text-gray-600">{item.data}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+
+
+
     </div>
   );
 }

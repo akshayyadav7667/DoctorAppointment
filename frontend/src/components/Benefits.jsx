@@ -29,7 +29,7 @@ export default function Benefits() {
             7 Benefits of Instant Online Doctor Consultation
           </h2>
 
-          <div className="flex justify-center items-center gap-8">
+          <div className="flex justify-center items-center gap-4  md:gap-8">
             <Smartphone className="w-10 h-10 text-orange-400" />
             <div >
               <h2 className="text-orange-400 font-semibold mb-1 ">Accessibility</h2>

@@ -6,7 +6,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import UserDashboard from "./pages/user/UserDashboard";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import { useContext } from "react";
+// import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import PublicLayout from "./layout/PublicLayout";
 import About from "./pages/About";

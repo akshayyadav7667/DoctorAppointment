@@ -4,8 +4,9 @@ import Specialities from '../components/Specialities'
 import Banner from '../components/Banner'
 import WhyHostpital from '../components/WhyHostpital'
 import Benefits from '../components/Benefits'
-import Faq from './Faq'
+// import Faq from './Faq'
 import Features from './Features'
+import TopDoctors from './TopDoctors'
 
 export default function HomePage() {
   return (
@@ -13,10 +14,10 @@ export default function HomePage() {
       <Header/>
       <Specialities/>
       <Banner/>
-      <Benefits/>
+      <TopDoctors/>
       <WhyHostpital/>
       <Features/>
-      <Faq/>
+      {/* <Faq/> */}
       
     </div>
   )
