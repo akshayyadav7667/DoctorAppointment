@@ -63,7 +63,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <button className="bg-green-500 mt-15 text-white  px-8 py-4 flex gap-4">
+          <button className="bg-green-500 mt-15 text-white cursor-pointer  px-8 py-4 flex gap-4">
             <PhoneCallIcon/>
             <p>Call now </p>
             

@@ -44,8 +44,8 @@ export default function Faq() {
   };
 
   return (
-    <div className="flex flex-col items-center px-4">
-      <h2 className="text-3xl py-10 text-orange-600 font-semibold">
+    <div className="flex flex-col items-center px-4 py-10 ">
+      <h2 className="text-3xl pb-10 pt-5 text-orange-600 font-semibold">
         Frequently Asked Questions
       </h2>
 

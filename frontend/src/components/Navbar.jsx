@@ -55,7 +55,7 @@ export default function Navbar() {
 
       {/* Mobile view  */}
 
-      <button className="lg:hidden z-50" onClick={toggleMenu}>
+      <button className="lg:hidden z-50 cursor-pointer" onClick={toggleMenu}>
         {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
 
@@ -69,6 +69,7 @@ export default function Navbar() {
               <li>
                 <NavLink
                   to={item.to}
+                  onClick={toggleMenu}
                   className={({ isActive }) =>
                     isActive
                       ? "text-blue-700 border-b-2 border-blue-700 pb-1"

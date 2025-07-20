@@ -37,7 +37,7 @@ export default function About() {
           <h2 className="text-center m-10 text-lg">Having World Class Delivery Capabilities & Trusted By </h2>
 
           <div className="flex flex-wrap justify-center gap-2">
-            <div className="bg-blue-400 border-2-white flex flex-col justify-center items-center p-10">
+            <div className="bg-blue-400 border-2-white flex flex-col justify-center items-center p-4 md:p-10">
               <h2 className="text-5xl text-white font-bold mb-2">500+</h2>
               <p className="text-white">Doctor</p>
             </div>
@@ -63,8 +63,8 @@ export default function About() {
       </div>
 
 
-      <div className="relative  flex flex-col  items-center">
-        <h2 className="py-10 text-2xl text-gray-700">1000+ EMPLOYEES. 12 LOCATIONS. 1 VISION.</h2>
+      <div className="relative  flex flex-col  items-center mb-10">
+        <h2 className="py-10 text-xl md:text-2xl text-gray-700 text-center px-3 ">1000+ EMPLOYEES. 12 LOCATIONS. 1 VISION.</h2>
         <img src={india} alt="" className="w-2/3 rounded-lg shadow-lg p-4 object-cover bg-blue-50" />
       </div>
 
