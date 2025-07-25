@@ -66,13 +66,13 @@ export const loginUser = async (req, res) => {
         // console.log(user)
 
         if (!user) {
-            return res.status(400).json("User is not found !");
+            return res.status(400).json({message:"User is not found !"});
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(400).json("Invalid crenditails");
+            return res.status(400).json({message:"Invalid crenditails"});
         }
 
         const token = jwt.sign(
@@ -88,6 +88,7 @@ export const loginUser = async (req, res) => {
 
 
         res.status(200).json({
+            success:true,
             message: "Login successful",
             token,
             user: {
@@ -104,8 +105,8 @@ export const loginUser = async (req, res) => {
         // res.status(200).json({ message: "User is found", others });
 
     } catch (error) {
-        console.log(error);
-        res.status(400).json({ errror: error.message });
+        // console.log(error);
+         res.status(400).json({ message: "Invalid Credentials" });
     }
 }
 

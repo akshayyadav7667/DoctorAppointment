@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { assets, doctors } from "../assets/assets";
+// import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function SingleDoctor() {
   const { docId } = useParams();
+
+  // const { user } = useContext(AuthContext);
 
   const [docInfo, setDocInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);

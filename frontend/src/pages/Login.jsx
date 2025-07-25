@@ -1,10 +1,61 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import login1 from "../assets/login1.svg";
 import login2 from "../assets/login2.svg";
 import login3 from "../assets/login3.svg";
 import login4 from "../assets/login4.svg";
+import { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import axios from 'axios'
+import toast from "react-hot-toast";
+
+
+
 
 export default function Login() {
+
+  const {backendUrl,setUserToken,setUser}= useContext(AuthContext)
+
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+  const navigate= useNavigate();
+
+
+  const handleSubmitLogin= async(e)=>{
+    e.preventDefault();
+
+    // console.log(email,password)
+
+    try {
+       const response = await axios.post(backendUrl+'/api/user/login',{
+        email,
+        password
+       })
+       
+       if(response.data.success===true)
+       {
+        // console.log(response.data.user)
+          localStorage.setItem("userToken",response.data.token)
+          setUserToken(response.data.token);
+          setUser(response.data.user)
+          toast.success(response.data.message)
+          setEmail("");
+          setPassword("");
+
+          // console.log(response.data.user);
+
+          navigate(`/${response.data.user.role}`)
+          // Navigate('/user')
+          // window.location.href="/user"
+       }
+       
+      //  console.log(response)
+    } catch (error) {
+      // console.log(error.response)
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      // toast.error(error.response.data.message)
+    }
+  }
+
   return (
     <div className="h-screen">
       <div className="flex flex-col-reverse lg:flex-row  md:gap-8 h-full">
@@ -67,7 +118,7 @@ export default function Login() {
               Login Here
             </h2>
 
-            <form className="flex flex-col gap-4 mb-4">
+            <form className="flex flex-col gap-4 mb-4" onSubmit={handleSubmitLogin}>
               {/* Email */}
               <div className="flex flex-col">
                 <label htmlFor="email" className="text-gray-700 font-medium">
@@ -76,6 +127,8 @@ export default function Login() {
                 <input
                   type="email"
                   id="email"
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
                   className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   placeholder="Enter your email"
                   autoComplete="email"
@@ -91,6 +144,8 @@ export default function Login() {
                 <input
                   type="password"
                   id="password"
+                  value={password}
+                  onChange={(e)=>setPassword(e.target.value)}
                   className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   placeholder="Enter your password"
                   autoComplete="current-password"

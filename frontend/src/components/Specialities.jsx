@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffe } from "react";
 import { specialityData } from "../assets/assets";
 import { Link } from "react-router-dom";
 
 export default function Specialities() {
-  const [specialist, setSpecialist] = useState("");
+  // const [specialist, setSpecialist] = useState("");
 
-  useEffect(() => {
-    console.log(specialist);
-  }, [specialist]);
+  // useEffect(() => {
+  //   console.log(specialist);
+  // }, [specialist]);
 
   return (
     <div className="flex flex-col items-center py-16 gap-4 ">

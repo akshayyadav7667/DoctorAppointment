@@ -2,15 +2,30 @@ import { useState, useEffect } from "react";
 import { specialityData } from "../assets/assets";
 import { doctors } from "../assets/assets";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Doctors() {
   const { speciality } = useParams();
+  // const {user}= useContext(A)
+  const {user}= useContext(AuthContext)
   const navigate = useNavigate();
   // const [category, setCategory] = useState(speciality);
 
   // const [filterDoctor, setFilterDoctor] = useState([]);
   const [category, setCategory] = useState(speciality || "");
   const [filterDoctor, setFilterDoctor] = useState([]);
+
+
+  // Detect base route according to user role
+ const basePath =
+  user?.role === "admin"
+    ? "/admin"
+    : user?.role === "doctor"
+    ? "/doctor"
+    : user?.role === "user"
+    ? "/user"
+    : "";
 
 
   // Update category from URL
@@ -36,10 +51,12 @@ export default function Doctors() {
     // Toggle: if already selected, deselect
     if (category === clickedSpeciality) {
       setCategory("");
-      navigate("/doctors"); // remove URL param
+      // navigate("/doctors"); // remove URL param
+      navigate(`${basePath}/doctors`);
     } else {
       setCategory(clickedSpeciality);
-      navigate(`/doctors/${clickedSpeciality}`);
+      // navigate(`/doctors/${clickedSpeciality}`);
+      navigate(`${basePath}/doctors/${clickedSpeciality}`);
     }
   };
 
@@ -87,7 +104,8 @@ export default function Doctors() {
           {filterDoctor.map((item) => (
             <div
               className="flex  flex-col bg-blue-50  rounded-xl transition-all  duration-300 m-10 md:m-2 "
-              onClick={() => navigate(`/doctor/${item._id}`)}
+              // onClick={() => navigate(`/doctor/${item._id}`)}
+               onClick={() => navigate(`${basePath}/doctor/${item._id}`)}
               key={item._id}
             >
               {/* <img src={item.image} alt="" className="bg-blue-50 w-full rounded-t-2xl border-0  hover:bg-gradient-to-bl hover:from-blue-700 hover:to-indigo-300 transition-all duration-300 " /> */}
