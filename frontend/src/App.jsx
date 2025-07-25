@@ -17,6 +17,7 @@ import Blog from "./pages/Blog";
 import HomePage from "./pages/HomePage";
 import Doctors from "./pages/Doctors";
 import SingleDoctor from "./pages/SingleDoctor";
+import Doctor from "../../backend/models/Doctor";
 function App() {
   // const { user } = useContext(AuthContext);
 
@@ -28,7 +29,8 @@ function App() {
         <Route path="/" element={<HomePage/>} />
         <Route path="/about" element={<About />} />
         <Route path="/doctors" element={<Doctors/>}/>
-        <Route path="/doctors/:docId" element={<SingleDoctor/>}/>
+        <Route path="/doctors/:speciality" element={<Doctors/>}/>
+        <Route path="/doctor/:docId" element={<SingleDoctor/>}/>
         <Route path="/features" element={<Features />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<Faq />} />

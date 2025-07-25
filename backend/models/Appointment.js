@@ -20,7 +20,7 @@ const appointmentSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     }
-}, { timeseries: true });
+}, { timestamps: true });
 
 
 const appointmentModel = mongoose.model("Appointment", appointmentSchema)

@@ -66,7 +66,7 @@ export default function Navbar() {
         >
           <ul className="flex flex-col items-center space-y-6 mt-20   ">
             {navItems.map((item) => (
-              <li>
+              <li key={item.to}>
                 <NavLink
                   to={item.to}
                   onClick={toggleMenu}
