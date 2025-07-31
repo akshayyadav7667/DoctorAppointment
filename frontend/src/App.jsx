@@ -26,6 +26,10 @@ import UserAppointments from "./pages/user/UserAppointments";
 import UserProfile from "./pages/user/UserProfile";
 import MyDashboard from "./pages/user/MyDashboard";
 import UserHome from "./pages/user/UserHome";
+import DoctorLayout from "./layout/DoctorLayout";
+import DoctorProfile from "./pages/doctor/DoctorProfile";
+import DoctorAppointment from "./pages/doctor/DoctorAppointment";
+import DoctorBlogs from "./pages/doctor/DoctorBlogs";
 function App() {
   // const { user } = useContext(AuthContext);
 
@@ -75,10 +79,19 @@ function App() {
           path="/doctor/*"
           element={
             <ProtectedRoute role="doctor">
-              <DoctorDashboard />
+              <DoctorLayout/>
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="myDashboard"  element={<DoctorDashboard/>} />
+          <Route path="profile" element={<DoctorProfile/>}/>
+          <Route path="appointments" element={<DoctorAppointment/>} />
+          <Route path="blogs" element={<DoctorBlogs />} />
+         
+
+          
+
+        </Route>
 
         {/* Admin Routes */}
         <Route

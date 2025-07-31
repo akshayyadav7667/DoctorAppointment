@@ -2,6 +2,10 @@ import Doctor from "../models/Doctor.js"
 import User from '../models/User.js'
 import Appointment from '../models/Appointment.js'
 import { sendEmail } from "../utils/sendEmail.js";
+import { cloudinary } from "../config/cloudinary.js";
+// import cloudinary from 'cloudinary'; 
+// make sure it's configured
+
 
 
 
@@ -68,7 +72,7 @@ export const getDoctorProfile = async (req, res) => {
             return res.status(403).json({ message: "Doctor not apporved yet" });
         }
 
-        res.status(200).json({ message: "Doctor Profile ", doctor });
+        res.status(200).json({ success: true, message: "Doctor Profile ", doctor });
 
 
     } catch (error) {
@@ -189,40 +193,70 @@ export const seeAppointmentDetails = async (req, res) => {
 
 
 
-
-
-
-// update doctor profile
-
 export const updateDoctorProfile = async (req, res) => {
-    const doctorUserId = req.user?.id;
-    try {
+  const doctorUserId = req.user?.id;
 
-        const { specialization, experience, fees, timings, location } = req.body;
-        // console.log(doctorUserId);
+//   console.log(req.body.about);
+//   console.log(req.file);
+  try {
+    // Fetch the doctor first
+    const doctor = await Doctor.findOne({ user_Id: doctorUserId });
 
-        if (!fees || fees < 0) {
-            return res.status(400).json({ message: "Invalid consultation fee" });
-        }
-
-
-        const doctor = await Doctor.findOneAndUpdate(
-            { user_Id: doctorUserId },
-            {
-                specialization, experience, fees, timings, location
-            },
-            { new: true }
-
-        )
-        // const doctor = await Doctor.findOne({ user_Id: doctorUserId });
-        // console.log(doctor);
-
-        res.status(200).json({ message: "update the profile ", doctor })
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({ error: error.message })
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
     }
-}
+
+    
+    if (req.file?.path) {
+      
+      if (doctor.doctor_image_id) {
+        await cloudinary.uploader.destroy(doctor.doctor_image_id);
+      }
+
+      
+      doctor.doctor_image = req.file.path;         // Cloudinary URL
+      doctor.doctor_image_id = req.file.filename;  // Cloudinary public_id
+    }
+
+    
+    const {
+      experience,
+      fees,
+      location,
+      specialization,
+      about,
+      timings,
+      gender,
+      available,
+      status,
+    } = req.body;
+
+    // Update only if fields are provided (safe updates)
+    if (experience !== undefined) doctor.experience = parseInt(experience);
+    if (fees !== undefined) doctor.fees = parseInt(fees);
+    if (location) doctor.location = location;
+    if (specialization) doctor.specialization = specialization;
+    if (about) doctor.about = about;
+    if (timings) {
+      doctor.timings = typeof timings === 'string' ? JSON.parse(timings) : timings;
+    }
+    if (gender) doctor.gender = gender;
+    if (available !== undefined) doctor.available = available;
+    if (status) doctor.status = status;
+    // if(bio) doctor.bio=bio;
+
+    await doctor.save();
+
+    res.status(200).json({
+      message: "Doctor profile updated successfully",
+      doctor,
+    });
+
+  } catch (error) {
+    console.error("Update Doctor Error:", error);
+    res.status(500).json({ error: "Internal server error", detail: error.message });
+  }
+};
 
 
 

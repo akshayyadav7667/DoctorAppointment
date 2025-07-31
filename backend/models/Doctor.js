@@ -6,23 +6,25 @@ const doctorSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    doctor_image:{
-        type:String
+    doctor_image: {
+        type: String,
+        default: "",
     },
-    doctor_image_id:{
+    doctor_image_id: {
+        type: String,
+        default: "",
+    },
+    about: {
         type:String,
+        default:"My about...",
     },
-    about:{
-        type:Object,
-        required:true
-    },
-    available:{
-        type:Boolean,
+    available: {
+        type: Boolean,
         default: true,
     },
-    appointment:{
+    appointment: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"Appointment",
+        ref: "Appointment",
     },
     specialization: {
         type: String,
@@ -32,18 +34,22 @@ const doctorSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    gender:{
+    gender: {
         type: String,
-        enum:['male', 'female','other'],
-        required:true
+        required: true
     },
     fees: {
         type: Number,
         required: true,
     },
+    // timings: {
+    //     type: Array,
+    //     required: true,
+    // },
     timings: {
         type: Array,
         required: true,
+        default:["9:00Am - 5-00Pm"]
     },
     status: {
         type: String,
@@ -56,6 +62,6 @@ const doctorSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-const Doctor = mongoose.model("Doctor",doctorSchema);
+const Doctor = mongoose.model("Doctor", doctorSchema);
 
 export default Doctor;

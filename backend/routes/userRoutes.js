@@ -11,7 +11,7 @@ userRouter.post('/register', registerUser);
 userRouter.post('/login', loginUser);
 userRouter.get('/profile', ProtectedAuth, authorizeRoles("user", "admin","doctor"), userProfile)
 
-userRouter.put('/update-profile', ProtectedAuth, authorizeRoles("user"), uploadUser.single('image'), updateUserProfile )
+userRouter.post('/update-profile', ProtectedAuth, authorizeRoles("user"), uploadUser.single('image'), updateUserProfile )
 userRouter.post('/applyDoctor', ProtectedAuth, authorizeRoles('user'), applyDoctor)
 
 userRouter.get('/get-appointment', ProtectedAuth, authorizeRoles('user'), getUserAppointments)
