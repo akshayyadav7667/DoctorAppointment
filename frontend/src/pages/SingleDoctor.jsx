@@ -3,11 +3,15 @@ import { useParams } from "react-router-dom";
 import { assets, doctors } from "../assets/assets";
 // import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
+import axios from "axios";
 
 export default function SingleDoctor() {
   const { docId } = useParams();
 
   // const { user } = useContext(AuthContext);
+
+  const { backendUrl, userToken } = useContext(AuthContext);
 
   const [docInfo, setDocInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
@@ -82,7 +86,23 @@ export default function SingleDoctor() {
         selectedDate.getMonth() + 1
       }_${selectedDate.getFullYear()}`;
 
-      console.log(formattedDate,slotTime)
+      console.log(formattedDate, slotTime);
+
+      const response = await axios.post(
+        backendUrl + "/api/appointment/applyAppointment",
+        {
+          date: formattedDate,
+          time: slotTime,
+          doctorId: docInfo._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+
+      console.log(response.data);
 
       // console.log(slotTime,"KJKJKJDF",docSlots[slotIndex][0].dateTime)
       // Backend call yahan lagega in future

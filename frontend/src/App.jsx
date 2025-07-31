@@ -21,7 +21,6 @@ import SingleDoctor from "./pages/SingleDoctor";
 // import Doctor from "../../backend/models/Doctor";
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
-import { Home } from "lucide-react";
 import UserAppointments from "./pages/user/UserAppointments";
 import UserProfile from "./pages/user/UserProfile";
 import MyDashboard from "./pages/user/MyDashboard";
@@ -30,6 +29,9 @@ import DoctorLayout from "./layout/DoctorLayout";
 import DoctorProfile from "./pages/doctor/DoctorProfile";
 import DoctorAppointment from "./pages/doctor/DoctorAppointment";
 import DoctorBlogs from "./pages/doctor/DoctorBlogs";
+import AdminAddDoctor from "./pages/admin/AdminAddDoctor";
+import AdminAppointment from "./pages/admin/AdminAppointment";
+// import AddDoctorAdmin from "./layout/AddDoctorAdmin";
 function App() {
   // const { user } = useContext(AuthContext);
 
@@ -63,15 +65,14 @@ function App() {
           }
         >
           <Route index element={<UserHome />} />
-          <Route path="doctors" element={<Doctors/>}/>
+          <Route path="doctors" element={<Doctors />} />
           <Route path="doctors/:speciality" element={<Doctors />} />
           <Route path="doctor/:docId" element={<SingleDoctor />} />
           <Route path="appointments" element={<UserAppointments />} />
           <Route path="profile" element={<UserProfile />} />
           <Route path="contact" element={<Contact />} />
           <Route path="blogs" element={<Blog />} />
-          <Route path="myDashboard" element={<MyDashboard/>} />
-
+          <Route path="myDashboard" element={<MyDashboard />} />
         </Route>
 
         {/* Doctor Routes */}
@@ -79,18 +80,14 @@ function App() {
           path="/doctor/*"
           element={
             <ProtectedRoute role="doctor">
-              <DoctorLayout/>
+              <DoctorLayout />
             </ProtectedRoute>
           }
         >
-          <Route path="myDashboard"  element={<DoctorDashboard/>} />
-          <Route path="profile" element={<DoctorProfile/>}/>
-          <Route path="appointments" element={<DoctorAppointment/>} />
+          <Route path="myDashboard" element={<DoctorDashboard />} />
+          <Route path="profile" element={<DoctorProfile />} />
+          <Route path="appointments" element={<DoctorAppointment />} />
           <Route path="blogs" element={<DoctorBlogs />} />
-         
-
-          
-
         </Route>
 
         {/* Admin Routes */}
@@ -101,7 +98,13 @@ function App() {
               <AdminLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          
+          <Route path="add-doctors" element={<AdminAddDoctor />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="appointments" element={<AdminAppointment/>} />
+        </Route>
+
         {/* <Route index element={<AdminDashboard />} /> */}
       </Routes>
     </>

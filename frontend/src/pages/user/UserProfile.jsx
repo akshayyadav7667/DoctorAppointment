@@ -50,9 +50,9 @@ export default function UserProfile() {
     );
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-white rounded-xl overflow-hidden">
+    <div className="max-w-4xl mx-auto m-10 bg-white rounded-xl overflow-hidden">
       {/* Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-500 h-32 relative">
+      <div className="bg-gradient-to-r from-indigo-400 to-orange-400 h-32 relative">
         <div className="absolute left-1/2 transform -translate-x-1/2 top-16">
           {/* <img
             src={user.image || imageLogo}
@@ -105,13 +105,13 @@ export default function UserProfile() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left mt-6 text-gray-700">
-          <div>
+          <div className="flex space-x-4 items-center">
             <p className="font-semibold">Email:</p>
-            <p className=" text-indigo-400 text-md leading-tight font-sans ">
+            <p className=" text-indigo-500 text-md leading-tight font-sans ">
               {user.email}
             </p>
           </div>
-          <div>
+          <div className="flex space-x-4 items-center">
             <p className="font-semibold">Phone:</p>
 
             {isedit ? (
@@ -124,12 +124,12 @@ export default function UserProfile() {
                 }
               />
             ) : (
-              <p className="text-sm text-gray-600">{user.phone}</p>
+              <p className="text-md font-mono text-green-600">{user.phone}</p>
             )}
           </div>
-          <div>
+          <div className="flex space-x-4 items-center">
             <p className="font-semibold">Date of Birth:</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-red-600">
               {isedit ? (
                 <input
                   type="date"
@@ -144,7 +144,7 @@ export default function UserProfile() {
               )}
             </p>
           </div>
-          <div>
+          <div className="flex space-x-4 items-center">
             <p className="font-semibold">Gender:</p>
             {isedit ? (
               <input
@@ -156,10 +156,10 @@ export default function UserProfile() {
                 }
               />
             ) : (
-              <p className="text-sm capitalize text-gray-600">{user.gender}</p>
+              <p className="text-sm capitalize font-semibold text-blue-600">{user.gender}</p>
             )}
           </div>
-          <div className="sm:col-span-2">
+          <div className="flex space-x-4 items-center sm:col-span-2">
             <p className="font-semibold">Address:</p>
             {isedit ? (
               <input
@@ -171,7 +171,7 @@ export default function UserProfile() {
                 }
               />
             ) : (
-              <p className="text-sm text-gray-600 ">{user.address}</p>
+              <p className=" text-green-600 text-md ">{user.address}</p>
             )}
           </div>
         </div>

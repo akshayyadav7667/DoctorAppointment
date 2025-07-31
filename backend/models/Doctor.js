@@ -49,7 +49,7 @@ const doctorSchema = new mongoose.Schema({
     timings: {
         type: Array,
         required: true,
-        default:["9:00Am - 5-00Pm"]
+        default:["10:00Am - 9-00Pm"]
     },
     status: {
         type: String,
