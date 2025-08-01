@@ -1,10 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 
 export default function NavbarUser() {
+  const navigate=useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -46,7 +47,7 @@ export default function NavbarUser() {
                 </NavLink>
               </li>
             ))}
-            <button className="relative px-4 cursor-pointer ">
+            <button onClick={()=>navigate('/user/chat')} className="relative px-4 cursor-pointer ">
               <IoChatbubbleEllipsesOutline className="w-8 h-8 text-green-700" />
               <span
                 className="absolute top-1 right-5 transform translate-x-1/2 -translate-y-1/2 

@@ -7,6 +7,8 @@ import Benefits from '../components/Benefits'
 // import Faq from './Faq'
 import Features from './Features'
 import TopDoctors from './TopDoctors'
+import StartBooking from './user/StartBooking'
+import ApplyForDoctor from './ApplyForDoctor'
 
 export default function HomePage() {
   return (
@@ -15,8 +17,12 @@ export default function HomePage() {
       <Specialities/>
       <Banner/>
       <TopDoctors/>
+
       <WhyHostpital/>
-      <Features/>
+      <StartBooking/>
+      <ApplyForDoctor/>
+
+      {/* <Features/> */}
       {/* <Faq/> */}
       
     </div>

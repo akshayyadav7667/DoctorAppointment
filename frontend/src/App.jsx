@@ -31,6 +31,9 @@ import DoctorAppointment from "./pages/doctor/DoctorAppointment";
 import DoctorBlogs from "./pages/doctor/DoctorBlogs";
 import AdminAddDoctor from "./pages/admin/AdminAddDoctor";
 import AdminAppointment from "./pages/admin/AdminAppointment";
+import ApplyForDoctor from "./pages/ApplyForDoctor";
+import FormApplyForDoctor from "./pages/user/FormApplyForDoctor";
+import ChartUser from "./pages/user/ChartUser";
 // import AddDoctorAdmin from "./layout/AddDoctorAdmin";
 function App() {
   // const { user } = useContext(AuthContext);
@@ -73,6 +76,8 @@ function App() {
           <Route path="contact" element={<Contact />} />
           <Route path="blogs" element={<Blog />} />
           <Route path="myDashboard" element={<MyDashboard />} />
+          <Route path="applyDoctor" element={<FormApplyForDoctor/>} />
+          <Route path="chat" element={<ChartUser/>} />
         </Route>
 
         {/* Doctor Routes */}
