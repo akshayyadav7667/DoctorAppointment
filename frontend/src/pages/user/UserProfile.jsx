@@ -100,8 +100,9 @@ export default function UserProfile() {
           </h2>
         )}
 
-        <p className="text-sm  mb-4 capitalize text-green-700 font-semibold">
-          {user.role}
+        <p className="text-sm mb-4 capitalize text-green-600 font-semibold mt-2">
+          <span className="text-orange-600">UserID :- </span>
+          {user._id}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left mt-6 text-gray-700">

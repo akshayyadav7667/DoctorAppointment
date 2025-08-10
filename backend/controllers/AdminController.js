@@ -136,7 +136,7 @@ export const getAllDoctorforApproval = async (req, res) => {
         // console.log(doctor);
 
 
-        res.status(200).json({ message: "All requested doctor for Approval", doctor })
+        res.status(200).json({success:true, message: "All requested doctor for Approval", doctor })
 
     } catch (error) {
         console.log(error);

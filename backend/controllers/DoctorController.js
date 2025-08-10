@@ -25,6 +25,9 @@ export const applyDoctor = async (req, res) => {
             return res.status(400).json("Already applied as doctor");
         }
 
+
+
+
         const doctor = new Doctor({
             user_Id: req.user.id,
             // doctor_image: req.file?.path || "", 
@@ -37,6 +40,18 @@ export const applyDoctor = async (req, res) => {
             location: req.body.location,
             status: "pending"
         })
+
+
+
+        if (req.file?.path) {
+
+            if (doctor.doctor_image_id) {
+                await cloudinary.uploader.destroy(doctor.doctor_image_id);
+            }
+            doctor.doctor_image = req.file.path;         // Cloudinary URL
+            doctor.doctor_image_id = req.file.filename;  // Cloudinary public_id
+        }
+
 
         // console.log(doctor);
 
@@ -194,68 +209,68 @@ export const seeAppointmentDetails = async (req, res) => {
 
 
 export const updateDoctorProfile = async (req, res) => {
-  const doctorUserId = req.user?.id;
+    const doctorUserId = req.user?.id;
 
-//   console.log(req.body.about);
-//   console.log(req.file);
-  try {
-    // Fetch the doctor first
-    const doctor = await Doctor.findOne({ user_Id: doctorUserId });
+    //   console.log(req.body.about);
+    //   console.log(req.file);
+    try {
+        // Fetch the doctor first
+        const doctor = await Doctor.findOne({ user_Id: doctorUserId });
 
-    if (!doctor) {
-      return res.status(404).json({ message: "Doctor not found" });
+        if (!doctor) {
+            return res.status(404).json({ message: "Doctor not found" });
+        }
+
+
+        if (req.file?.path) {
+
+            if (doctor.doctor_image_id) {
+                await cloudinary.uploader.destroy(doctor.doctor_image_id);
+            }
+
+
+            doctor.doctor_image = req.file.path;         // Cloudinary URL
+            doctor.doctor_image_id = req.file.filename;  // Cloudinary public_id
+        }
+
+
+        const {
+            experience,
+            fees,
+            location,
+            specialization,
+            about,
+            timings,
+            gender,
+            available,
+            status,
+        } = req.body;
+
+        // Update only if fields are provided (safe updates)
+        if (experience !== undefined) doctor.experience = parseInt(experience);
+        if (fees !== undefined) doctor.fees = parseInt(fees);
+        if (location) doctor.location = location;
+        if (specialization) doctor.specialization = specialization;
+        if (about) doctor.about = about;
+        if (timings) {
+            doctor.timings = typeof timings === 'string' ? JSON.parse(timings) : timings;
+        }
+        if (gender) doctor.gender = gender;
+        if (available !== undefined) doctor.available = available;
+        if (status) doctor.status = status;
+        // if(bio) doctor.bio=bio;
+
+        await doctor.save();
+
+        res.status(200).json({
+            message: "Doctor profile updated successfully",
+            doctor,
+        });
+
+    } catch (error) {
+        console.error("Update Doctor Error:", error);
+        res.status(500).json({ error: "Internal server error", detail: error.message });
     }
-
-    
-    if (req.file?.path) {
-      
-      if (doctor.doctor_image_id) {
-        await cloudinary.uploader.destroy(doctor.doctor_image_id);
-      }
-
-      
-      doctor.doctor_image = req.file.path;         // Cloudinary URL
-      doctor.doctor_image_id = req.file.filename;  // Cloudinary public_id
-    }
-
-    
-    const {
-      experience,
-      fees,
-      location,
-      specialization,
-      about,
-      timings,
-      gender,
-      available,
-      status,
-    } = req.body;
-
-    // Update only if fields are provided (safe updates)
-    if (experience !== undefined) doctor.experience = parseInt(experience);
-    if (fees !== undefined) doctor.fees = parseInt(fees);
-    if (location) doctor.location = location;
-    if (specialization) doctor.specialization = specialization;
-    if (about) doctor.about = about;
-    if (timings) {
-      doctor.timings = typeof timings === 'string' ? JSON.parse(timings) : timings;
-    }
-    if (gender) doctor.gender = gender;
-    if (available !== undefined) doctor.available = available;
-    if (status) doctor.status = status;
-    // if(bio) doctor.bio=bio;
-
-    await doctor.save();
-
-    res.status(200).json({
-      message: "Doctor profile updated successfully",
-      doctor,
-    });
-
-  } catch (error) {
-    console.error("Update Doctor Error:", error);
-    res.status(500).json({ error: "Internal server error", detail: error.message });
-  }
 };
 
 
